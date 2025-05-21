@@ -9,4 +9,7 @@ public interface BookingService {
 
     BookingDto fetchBooking(String id);
 
+    List<BookingDto> fetchBooking();
+
+    void deleteBooking(String id);
 }

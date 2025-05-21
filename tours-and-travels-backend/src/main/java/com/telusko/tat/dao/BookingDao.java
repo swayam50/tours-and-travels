@@ -1,5 +1,6 @@
 package com.telusko.tat.dao;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,14 @@ public class BookingDao {
     }
 
     public Optional<Booking> getBookingById(String id) {
-        //TODO: handle SQL exception
         return bookingRepository.findById(UUID.fromString(id));
+    }
+
+    public List<Booking> getAllBookings() {
+        return bookingRepository.findAll();
+    }
+
+    public void removeBooking(String id) {
+        bookingRepository.deleteById(UUID.fromString(id));
     }
 }

@@ -1,4 +1,4 @@
-tours-and-travels/HELP.md
+tours-and-travels-backend/HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
