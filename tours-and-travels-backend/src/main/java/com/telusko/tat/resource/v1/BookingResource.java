@@ -1,8 +1,10 @@
 package com.telusko.tat.resource.v1;
 
 import java.net.URI;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,7 +32,7 @@ public class BookingResource {
     private BookingService bookingService;
 
     @PostMapping
-    public ResponseEntity<?> createBooking(@RequestBody BookingRequest request) {
+    public ResponseEntity<GenericResponse> createBooking(@RequestBody BookingRequest request) {
         String bookingId = bookingService.createBooking(request.getData());
 
         URI location = ServletUriComponentsBuilder
@@ -39,14 +41,27 @@ public class BookingResource {
             .buildAndExpand(bookingId)
             .toUri();
 
-        return ResponseEntity.created(location).body(new GenericResponse("SUCCESS", "Booking with id %s created successfully.".formatted(bookingId)));
+        return ResponseEntity.created(location).body(GenericResponse.success("Booking with id %s created successfully".formatted(bookingId)));
     }
 
     @GetMapping("/{bookingId}")
-    public ResponseEntity<?> fetchBooking(@PathVariable("bookingId") String id) {
-        BookingDto bookingData = bookingService.fetchBooking(id);
+    public ResponseEntity<BookingResponse> fetchBooking(@PathVariable("bookingId") String id) {
+        BookingDto booking = bookingService.fetchBooking(id);
+        return ResponseEntity.ok().body(BookingResponse.success("Booking with id %s fetched successfully".formatted(id), booking));
+    }
 
-        return ResponseEntity.ok().body(new BookingResponse("SUCCESS", "Booking fetched successfully", bookingData));
+    @GetMapping
+    public ResponseEntity<BookingResponse> fetchBooking() {
+        List<BookingDto> bookings = bookingService.fetchBooking();
+        return bookings.isEmpty()
+               ? ResponseEntity.noContent().build()
+               : ResponseEntity.ok(BookingResponse.success("All bookings fetched successfully", bookings));
+    }
+
+    @DeleteMapping("/{bookingId}")
+    public ResponseEntity<GenericResponse> deleteBooking(@PathVariable("bookingId") String id) {
+        bookingService.deleteBooking(id);
+        return ResponseEntity.accepted().body(GenericResponse.success("Booking deletion request is acknowledged"));
     }
 
 }
