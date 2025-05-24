@@ -1,4 +1,4 @@
-package com.telusko.tat.resource.v1;
+package com.telusko.tat.controller.v1;
 
 import java.net.URI;
 import java.util.List;
@@ -26,7 +26,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
     consumes = APPLICATION_JSON_VALUE,
     produces = APPLICATION_JSON_VALUE
 )
-public class BookingResource {
+public class BookingController {
 
     @Autowired
     private BookingService bookingService;
